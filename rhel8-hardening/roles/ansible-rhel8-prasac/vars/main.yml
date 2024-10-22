@@ -1,0 +1,17 @@
+# Standards: 1.1.37
+---
+
+# Modified by J to test impact
+cis_target_os_distribution:
+  - "RedHat"
+  - "OracleLinux"
+cis_target_os_versions:
+  - "7.0"
+  - "7.1"
+  - "7.2"
+  - "7.3"
+  - "7.4"
+  - "7.5"
+  - "7.6"
+  - "7.7"
+  - "7.8"

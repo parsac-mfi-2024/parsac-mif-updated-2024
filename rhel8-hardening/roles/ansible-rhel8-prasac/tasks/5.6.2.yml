@@ -1,0 +1,37 @@
+---
+- name: "5.6.2 | PATCH | Ensure system accounts are secured"
+  block:
+      - name: "5.6.2 | Ensure system accounts are secured | Set nologin"
+        user:
+            name: "{{ item.id }}"
+            shell: /usr/sbin/nologin
+        with_items:
+            - "{{ rhel8cis_passwd }}"
+        when:
+            - item.id != "root"
+            - item.id != "sync"
+            - item.id != "shutdown"
+            - item.id != "halt"
+            - item.gid < rhel8uid_interactive_uid_start | int
+            - item.shell != "/bin/false"
+            - item.shell != "/usr/sbin/nologin"
+        loop_control:
+            label: "{{ item.id }}"
+
+      - name: "5.6.2 | PATCH | Ensure system accounts are secured | Lock accounts"
+        user:
+            name: "{{ item.id }}"
+            password_lock: true
+        with_items:
+            - "{{ rhel8cis_passwd }}"
+        when:
+            - item.id != "halt"
+            - item.id != "shutdown"
+            - item.id != "sync"
+            - item.id != "root"
+            - item.id != "nfsnobody"
+            - item.gid < rhel8uid_interactive_uid_start | int
+            - item.shell != "/bin/false"
+            - item.shell != "/usr/sbin/nologin"
+        loop_control:
+            label: "{{ item.id }}"

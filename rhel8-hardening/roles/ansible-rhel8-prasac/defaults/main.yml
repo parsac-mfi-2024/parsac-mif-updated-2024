@@ -1,0 +1,32 @@
+---
+cis_apply_level_1_profile: true
+
+cis_telnet_install: { package: telnet-server, state: absent, exception: 123, service: telnet.socket, enabled: no, rstate: started, client: telnet, client_state: present }
+
+rhel8cis_pass:
+    max_days: 90
+    min_days: 1
+    warn_age: 7
+
+rhel8cis_pam_faillock:
+    #attempts: 3
+    #unlock_time: 1800
+    remember: 3
+
+rhel8cis_authselect:
+    custom_profile_name: ansible-prasac-policy
+    default_file_to_copy: "sssd"
+
+rhel8uid_interactive_uid_start: 1000
+
+rhel8cis_sshd:
+    clientalivecountmax: 0
+    clientaliveinterval: 600
+
+pass_exp_excluded_users:
+  - root
+  #- ansible
+
+rhel8cis_pam_password:
+  minlen: 8
+  minclass: 4

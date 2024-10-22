@@ -1,0 +1,13 @@
+---
+- name: "5.3.3.2.2 | PATCH | Ensure password length is configured | pwquality.confi"
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^minlen', line: 'minlen = {{ rhel9cis_pam_password.minlen }}' }
+    - { regexp: '^minclass', line: 'minclass = {{ rhel9cis_pam_password.minclass }}' }
+    - { regexp: '^lcredit', line: 'lcredit = 0'}
+    - { regexp: '^ucredit', line: 'ucredit = 0'}
+    - { regexp: '^dcredit', line: 'dcredit = 0'}
+    - { regexp: '^ocredit', line: 'ocredit = 0'}

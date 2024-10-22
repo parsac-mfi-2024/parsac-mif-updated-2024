@@ -1,0 +1,34 @@
+---
+- hosts: all
+  roles:
+    - role: rhel-system-roles.timesync
+      vars:
+        timesync_ntp_provider: chrony
+        timesync_ntp_servers:
+          - hostname: 192.168.110.66
+            iburst: yes
+          - hostname: 192.168.120.66
+            iburst: yes
+    - role: ansible-rhel8-prasac
+
+  tasks:
+    - name: Unset password expiration for root user
+      shell: "chage --maxdays 99999 {{ item }}"
+      changed_when: false
+      loop: "{{ pass_exp_excluded_users }}"
+
+    - name: "Force user to change password first login"
+      shell: "chage -d0 {{ item.id }}"
+      loop: "{{ rhel8cis_passwd }}"
+      loop_control:
+          label: "{{ item.id }}"
+      when:
+        - item.uid >= 1000
+        - item.id != "ansible"
+        - item.id != "nobody"
+        - changed_all_user|bool  == true|bool
+
+    - name: "Multi User | Force user to change password first login"
+      shell: "chage -d0 {{ item }}"
+      loop: "{{ lock_user_list.split('\n') }}"
+      when: lock_user_list != ''

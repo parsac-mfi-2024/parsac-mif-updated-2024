@@ -1,0 +1,6 @@
+---
+- name: "2.2.16 | PATCH | Ensure telnet-server is not installed"
+  package:
+      name: telnet-server
+      state: absent
+  when: "'telnet-server' in ansible_facts.packages"

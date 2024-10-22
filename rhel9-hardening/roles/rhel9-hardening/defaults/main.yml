@@ -1,0 +1,60 @@
+---
+pass_exp_excluded_users:
+  - root
+
+rhel9cis_pam_pwquality:
+    minlen: 8
+    minclass: 4
+
+#############################################################
+
+rhel9cis_sshd_config_file: /etc/ssh/sshd_config
+
+rhel9cis_sshd:
+    clientalivecountmax: 2
+    clientaliveinterval: 5
+
+##############################################################
+
+rhel9cis_authselect:
+    custom_profile_name: ansible-prasac-policy
+    default_file_to_copy: sssd
+
+rhel9cis_authselect_custom_profile_create: false
+
+rhel9cis_authselect_custom_profile_select: false
+
+rhel9cis_pam_password:
+    minlen: 8
+    minclass: 4
+
+rhel9cis_pass:
+    max_days: 90
+    min_days: 1
+    warn_age: 7
+
+rhel9cis_force_user_maxdays: false
+
+rhel9cis_force_user_mindays: false
+
+rhel9cis_force_user_warnage: false
+
+rhel9cis_futurepwchgdate_autofix: true
+
+rhel9cis_pam_faillock:
+
+   unlock_time: 1800
+   deny: 3
+   remember: 3
+
+rhel9cis_add_faillock_without_authselect: false
+
+rhel9cis_inactivelock:
+
+  lock_days: 30
+
+min_int_uid: 1000
+
+max_int_uid: 65533
+
+#############################################################
