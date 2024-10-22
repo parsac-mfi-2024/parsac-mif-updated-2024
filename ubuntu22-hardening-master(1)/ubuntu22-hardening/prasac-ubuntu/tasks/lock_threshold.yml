@@ -1,0 +1,36 @@
+---
+- name: "Create faillock directory"
+  file:
+    path: /var/run/faillock
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: "Ensure account is locked after 3 consecutive failed login attempts (authfail)"
+  lineinfile:
+    path: /etc/pam.d/common-auth
+    insertafter: '^auth\s+\[success=1 default=ignore\]\s+pam_unix\.so nullok'
+    line: "auth    [default=die]    pam_faillock.so authfail audit deny={{ RETRIES }} unlock_time={{ UNLOCK_AFTER }} even_deny_root root_unlock_time={{ UNLOCK_AFTER }}"
+    state: present
+
+- name: "Ensure account is locked after 3 consecutive failed login attempts"
+  lineinfile:
+    path: /etc/pam.d/common-auth
+    insertbefore: '^auth\s+\[success=1 default=ignore\]\s+pam_unix\.so nullok'
+    line: "auth    required    pam_faillock.so preauth silent audit deny={{ RETRIES }} unlock_time={{ UNLOCK_AFTER }} even_deny_root root_unlock_time={{ UNLOCK_AFTER }}"
+    state: present
+    
+- name: "Ensure account is locked after 3 consecutive failed login attempts"
+  lineinfile:
+    path: /etc/pam.d/common-auth
+    insertafter: '^auth\s+\[default=die\]\s+pam_faillock\.so'
+    line: "auth		sufficient		pam_faillock.so authsucc"
+    state: present
+
+- name: "Ensure account is locked after 3 consecutive failed login attempts (account)"
+  lineinfile:
+    path: /etc/pam.d/common-account
+    insertbefore: '^account'
+    line: "account    required    pam_faillock.so"
+    state: present
